@@ -1,5 +1,3 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
-
 ## Getting Started
 
 # User Management System
@@ -28,7 +26,7 @@ This is a User Management System built with Next.js and Tailwind CSS. It allows 
 1. **Clone the repository**
 
    ```sh
-   git clone https://github.com/your-username/user-management-system.git
+   git clone https://github.com/basitol/assessment-v
    cd user-management-system
    ```
 
@@ -81,4 +79,5 @@ GET /api/users: Fetch all users
 POST /api/users: Create a new user
 PUT /api/users/:id: Update a user
 DELETE /api/users/:id: Delete a user
+
 # assessment-v
