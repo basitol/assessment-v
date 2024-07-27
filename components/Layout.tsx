@@ -2,7 +2,6 @@
 import Sidebar from './Sidebar';
 import Navbar from './Navbar';
 import {ReactNode} from 'react';
-import DynamicBreadcrumb from './DynamicBreadcrumb';
 
 interface LayoutProps {
   children: ReactNode;

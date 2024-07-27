@@ -1,7 +1,16 @@
-import React from 'react';
+'use client';
 
-const page = () => {
-  return <div></div>;
+import {useRouter} from 'next/navigation';
+import {useEffect} from 'react';
+
+const HomePage = () => {
+  const router = useRouter();
+
+  useEffect(() => {
+    router.push('/account'); // Adjust this to your actual dashboard route
+  }, [router]);
+
+  return null;
 };
 
-export default page;
+export default HomePage;

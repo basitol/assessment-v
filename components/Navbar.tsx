@@ -7,8 +7,18 @@ import {SlSettings} from 'react-icons/sl';
 import {Menu} from '@headlessui/react';
 import {Fragment} from 'react';
 import avatar from '@/public/images/avatar.png'; // Replace with your avatar image path
+import {usePathname} from 'next/navigation';
 
 const Navbar = () => {
+  const pathname = usePathname();
+
+  const navItems = [
+    {href: '/notifications', icon: PiBellSimple, label: 'Notifications'},
+    {href: '/wallet', icon: PiWallet, label: 'Wallet'},
+    {href: '/help', icon: PiQuestion, label: 'Help'},
+    {href: '/settings', icon: SlSettings, label: 'Settings'},
+  ];
+
   return (
     <div className='flex items-center justify-between px-9 py-5 border bg-white shadow-sm'>
       <div className='flex items-center gap-6 w-1/2'>
@@ -22,30 +32,19 @@ const Navbar = () => {
         />
       </div>
       <div className='flex items-center gap-6'>
-        <Link href='/notifications'>
-          <div className='flex flex-col items-center text-gray-600 hover:text-gray-800 cursor-pointer'>
-            <PiBellSimple size={24} />
-            <span className='text-xs'>Notifications</span>
-          </div>
-        </Link>
-        <Link href='/wallet'>
-          <div className='flex flex-col items-center text-gray-600 hover:text-gray-800 cursor-pointer'>
-            <PiWallet size={24} />
-            <span className='text-xs'>Wallet</span>
-          </div>
-        </Link>
-        <Link href='/help'>
-          <div className='flex flex-col items-center text-gray-600 hover:text-gray-800 cursor-pointer'>
-            <PiQuestion size={24} />
-            <span className='text-xs'>Help</span>
-          </div>
-        </Link>
-        <Link href='/settings'>
-          <div className='flex flex-col items-center text-gray-600 hover:text-gray-800 cursor-pointer'>
-            <SlSettings size={24} />
-            <span className='text-xs'>Settings</span>
-          </div>
-        </Link>
+        {navItems.map(item => (
+          <Link key={item.href} href={item.href}>
+            <div
+              className={`flex flex-col items-center cursor-pointer ${
+                pathname === item.href
+                  ? 'text-blue-600'
+                  : 'text-gray-600 hover:text-gray-800'
+              }`}>
+              <item.icon size={24} />
+              <span className='text-xs'>{item.label}</span>
+            </div>
+          </Link>
+        ))}
 
         <Menu as='div' className='relative'>
           <Menu.Button className='flex items-center'>

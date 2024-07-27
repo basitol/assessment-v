@@ -1,5 +1,6 @@
 'use client';
 
+import DeleteUserDialog from '@/components/DeleteUserDialog';
 import EditUserDialog from '@/components/EditUserDialog';
 import {Button} from '@/components/ui/button';
 import {Checkbox} from '@/components/ui/checkbox';
@@ -94,9 +95,9 @@ export const columns: ColumnDef<User>[] = [
     id: 'actions',
     header: 'Actions',
     cell: ({row}) => (
-      <div className='font-bold flex'>
+      <div className='font-bold flex gap-2'>
         <EditUserDialog user={row.original} />
-        <button className='ml-2 text-[#98A2B3]'>Remove</button>
+        <DeleteUserDialog user={row.original} />
       </div>
     ),
   },

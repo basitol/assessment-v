@@ -1,28 +1,24 @@
+// components/DataTable.tsx
 'use client';
 
+import React from 'react';
 import {
   ColumnDef,
-  flexRender,
   getCoreRowModel,
   useReactTable,
   SortingState,
   getSortedRowModel,
   ColumnFiltersState,
   getFilteredRowModel,
+  VisibilityState,
 } from '@tanstack/react-table';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table';
-import React from 'react';
-import {Input} from '@/components/ui/input';
+import {Table} from '@/components/ui/table';
 import NewUserDialog from '@/components/NewUserDialog';
 import {CirclePlus} from 'lucide-react';
 import {useUserContext} from '@/contexts/UserContext';
+import SearchAndFilter from '@/components/SearchAndFilter';
+import DataTableHeader from '@/components/TableHeader';
+import DataTableBody from '@/components/TableBody';
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -39,7 +35,10 @@ export function DataTable<TData, TValue>({
   );
   const {createUser} = useUserContext();
 
-  const table = useReactTable({
+  const [columnVisibility, setColumnVisibility] =
+    React.useState<VisibilityState>({});
+
+  const table = useReactTable<TData>({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
@@ -47,24 +46,18 @@ export function DataTable<TData, TValue>({
     getSortedRowModel: getSortedRowModel(),
     onColumnFiltersChange: setColumnFilters,
     getFilteredRowModel: getFilteredRowModel(),
+    onColumnVisibilityChange: setColumnVisibility,
     state: {
       sorting,
       columnFilters,
+      columnVisibility,
     },
   });
 
   return (
     <div>
       <div className='flex items-center justify-between py-4'>
-        <Input
-          placeholder='Search here...'
-          value={(table.getColumn('email')?.getFilterValue() as string) ?? ''}
-          onChange={event =>
-            table.getColumn('email')?.setFilterValue(event.target.value)
-          }
-          className='max-w-sm'
-        />
-
+        <SearchAndFilter table={table} />
         <NewUserDialog
           onSubmit={async user => await createUser(user)}
           triggerLabel='New User'
@@ -73,50 +66,8 @@ export function DataTable<TData, TValue>({
       </div>
       <div className='rounded-md border'>
         <Table>
-          <TableHeader>
-            {table.getHeaderGroups().map(headerGroup => (
-              <TableRow key={headerGroup.id}>
-                {headerGroup.headers.map(header => {
-                  return (
-                    <TableHead key={header.id}>
-                      {header.isPlaceholder
-                        ? null
-                        : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext(),
-                          )}
-                    </TableHead>
-                  );
-                })}
-              </TableRow>
-            ))}
-          </TableHeader>
-          <TableBody>
-            {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map(row => (
-                <TableRow
-                  key={row.id}
-                  data-state={row.getIsSelected() && 'selected'}>
-                  {row.getVisibleCells().map(cell => (
-                    <TableCell key={cell.id}>
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext(),
-                      )}
-                    </TableCell>
-                  ))}
-                </TableRow>
-              ))
-            ) : (
-              <TableRow>
-                <TableCell
-                  colSpan={columns.length}
-                  className='h-24 text-center'>
-                  No results.
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
+          <DataTableHeader headerGroups={table.getHeaderGroups()} />
+          <DataTableBody rows={table.getRowModel().rows} columns={columns} />
         </Table>
       </div>
     </div>
